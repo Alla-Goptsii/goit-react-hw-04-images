@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 export default class Searchbar extends Component {
@@ -35,11 +36,10 @@ export default class Searchbar extends Component {
           <input
             className="input"
             type="text"
-            name="imageName"
             value={this.state.imageName}
             onChange={this.handleImageNameSearch}
-            // autocomplete="off"
-            // autofocus
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
           />
         </form>
@@ -47,3 +47,7 @@ export default class Searchbar extends Component {
     );
   }
 }
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
