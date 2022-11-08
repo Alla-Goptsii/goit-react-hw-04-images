@@ -12,17 +12,20 @@ export default class ImageGallery extends Component {
     console.log(this.props.gallery);
 
     return (
-      <ul className="gallery">
-        {this.props.gallery.map(image => {
-          return (
-            <ImageGalleryItem
-              key={nanoid()}
-              smallImgURL={image.webformatURL}
-              id={image.id}
-            />
-          );
-        })}
-      </ul>
+      <div>
+        <ul className="gallery">
+          {this.props.gallery.map(image => {
+            return (
+              <ImageGalleryItem
+                key={nanoid()}
+                // smallImgURL={image.webformatURL}
+                // id={image.id}
+                image={image}
+              />
+            );
+          })}
+        </ul>
+      </div>
     );
   }
 }
