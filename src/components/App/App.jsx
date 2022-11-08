@@ -69,7 +69,7 @@ export default class App extends Component {
         <Searchbar onSubmit={this.hadleSearchFormSubmit}></Searchbar>
         <ToastContainer autoClose={2000} />
         {imageName && <p>{imageName} </p>}
-        {gallery.length > 0 && <ImageGallery gallery={this.state.gallery} />}
+        {gallery.length > 0 && <ImageGallery gallery={gallery} />}
         {totalHits > gallery.length && <Button onClick={this.handleLoadMore} />}
       </div>
     );
