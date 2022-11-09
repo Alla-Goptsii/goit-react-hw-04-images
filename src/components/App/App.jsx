@@ -5,7 +5,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import { Button } from '../Button/Button';
 import { Loader } from '../Loader/Loader';
-// import { Modal } from '../Modal/Modal';
 
 export default class App extends Component {
   state = {
@@ -17,7 +16,6 @@ export default class App extends Component {
     status: 'idle',
     page: 1,
     totalHits: null,
-    // showModal: false,
   };
 
   componentDidUpdate(prevProps, pervState) {
@@ -27,12 +25,13 @@ export default class App extends Component {
     const url = this.state.URL + queryParams;
 
     if (prevName !== nextName) {
-      console.log('Change name');
-      console.log('pervState.imageName', pervState.imageName);
-      console.log('this.state.imageName', this.state.imageName);
       this.setState({ status: 'pending', gallery: [], page: 1 });
 
-      // imagesFetch()
+      if (pervState.page !== this.state.page) {
+        console.log('fetch data');
+        this.setState({ status: 'pending' });
+      }
+
       fetch(url)
         .then(response => {
           if (response.ok) return response.json();
@@ -48,8 +47,8 @@ export default class App extends Component {
             toast.error('Nothing was found for your request');
           }
           const selectedProperties = gallery.hits.map(
-            ({ id, largeImageURL, webformatURL }) => {
-              return { id, largeImageURL, webformatURL };
+            ({ id, largeImageURL, webformatURL, tags }) => {
+              return { id, largeImageURL, webformatURL, tags };
             }
           );
           this.setState(prevState => {
@@ -57,12 +56,11 @@ export default class App extends Component {
               gallery: [...prevState.gallery, ...selectedProperties],
               status: 'resolved',
               totalHits: gallery.total,
-              page: 1,
+              // page: 1,
             };
           });
         })
         .catch(error => this.setState({ error, status: 'rejected' }));
-      // .finally(() => this.setState({ loading: false }));
     }
   }
 
@@ -70,17 +68,9 @@ export default class App extends Component {
     this.setState({ imageName });
   };
 
-  handleLoadMore = () => {
-    this.setState(prevState => {
-      return { page: prevState.page + 1 };
-    });
+  loadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
   };
-
-  // toggleModal = () => {
-  //   this.setState(showModal => ({
-  //     showModal: !showModal,
-  //   }));
-  // };
 
   render() {
     const { imageName, gallery, totalHits, status, error } = this.state;
@@ -93,7 +83,7 @@ export default class App extends Component {
         <ToastContainer autoClose={2000} />
         {imageName && <p>{imageName} </p>}
         {gallery.length > 0 && <ImageGallery gallery={gallery} />}
-        {totalHits > gallery.length && <Button onClick={this.handleLoadMore} />}
+        {totalHits > gallery.length && <Button onClick={this.loadMore} />}
         {/* {showModal && <Modal onModalClose={this.toggleModal} />} */}
       </div>
     );

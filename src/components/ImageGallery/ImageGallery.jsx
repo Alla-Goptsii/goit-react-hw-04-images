@@ -18,8 +18,10 @@ export default class ImageGallery extends Component {
             return (
               <ImageGalleryItem
                 key={nanoid()}
-                // smallImgURL={image.webformatURL}
-                // id={image.id}
+                webformatURL={image.webformatURL}
+                id={image.id}
+                largeImageURL={image.largeImageURL}
+                tags={image.tags}
                 image={image}
               />
             );

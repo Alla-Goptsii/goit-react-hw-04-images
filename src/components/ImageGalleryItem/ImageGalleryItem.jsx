@@ -1,28 +1,11 @@
-// export const ImageGalleryItem = ({ id, smallImgURL }) => {
-
-//   return (
-//     <li className="gallery-item" >
-//       <img src={smallImgURL} alt={id} />
-//     </li>
-//   );
-// };
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from '../Modal/Modal';
 
 export default class ImageGalleryItem extends Component {
   state = {
-    // id,
-    // smallImgURL,
     isModalOpen: false,
   };
-
-  // toggleModal = () => {
-  //   this.setState(showModal => ({
-  //     showModal: !showModal,
-  //   }));
-  // };
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isModalOpen) {
@@ -41,11 +24,12 @@ export default class ImageGalleryItem extends Component {
   };
 
   closeModal = () => {
-    this.setState({ isModalOpen: false });
+    this.setState(isModalOpen => ({
+      isModalOpen: !isModalOpen,
+    }));
   };
 
   render() {
-    // console.log(largeImageURL);
     const { webformatURL, largeImageURL, tags, id } = this.props.image;
     return (
       <li className="gallery-item">
@@ -64,5 +48,7 @@ export default class ImageGalleryItem extends Component {
 
 ImageGalleryItem.propTypes = {
   id: PropTypes.number.isRequired,
-  smallImgURL: PropTypes.string.isRequired,
+  webformatURL: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
 };
