@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from '../Modal/Modal';
 
+import {
+  ImageGallerySet,
+  ImageGalleryItemImage,
+} from './ImageGalleryItem.styled';
 export default class ImageGalleryItem extends Component {
   state = {
     isModalOpen: false,
@@ -32,8 +36,12 @@ export default class ImageGalleryItem extends Component {
   render() {
     const { webformatURL, largeImageURL, tags, id } = this.props.image;
     return (
-      <li className="gallery-item">
-        <img src={webformatURL} alt={id} onClick={this.openModal} />
+      <ImageGallerySet className="gallery-item">
+        <ImageGalleryItemImage
+          src={webformatURL}
+          alt={id}
+          onClick={this.openModal}
+        />
         {this.state.isModalOpen && (
           <Modal
             largeImageURL={largeImageURL}
@@ -41,7 +49,7 @@ export default class ImageGalleryItem extends Component {
             onModalClose={this.closeModal}
           />
         )}
-      </li>
+      </ImageGallerySet>
     );
   }
 }

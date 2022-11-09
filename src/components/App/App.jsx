@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import { Button } from '../Button/Button';
 import { Loader } from '../Loader/Loader';
+import { Container } from './App.styled';
 
 export default class App extends Component {
   state = {
@@ -87,13 +88,13 @@ export default class App extends Component {
     }
 
     return (
-      <div>
+      <Container>
         <Searchbar onSubmit={this.hadleSearchFormSubmit}></Searchbar>
         {error && <h1>{error.message}</h1>}
         <ToastContainer autoClose={2000} />
         {gallery.length > 0 && <ImageGallery gallery={gallery} />}
         {totalHits > gallery.length && <Button onClick={this.loadMore} />}
-      </div>
+      </Container>
     );
   }
 }
