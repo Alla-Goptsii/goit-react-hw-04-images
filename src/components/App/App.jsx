@@ -18,21 +18,11 @@ export default class App extends Component {
     totalHits: null,
   };
 
-  componentDidUpdate(prevProps, pervState) {
-    const prevName = pervState.imageName;
-    const nextName = this.state.imageName;
-    const queryParams = `?q=${nextName}&page=1&key=${this.state.API_KEY}&image_type=photo&orientation=horizontal&per_page=12`;
-    const url = this.state.URL + queryParams;
-
-    if (prevName !== nextName) {
-      this.setState({ status: 'pending', gallery: [], page: 1 });
-
-      if (pervState.page !== this.state.page) {
-        console.log('fetch data');
-        this.setState({ status: 'pending' });
-      }
-
-      fetch(url)
+  fetchImg = () => {
+    setTimeout(() => {
+      return fetch(
+        `${this.state.URL}?q=${this.state.imageName}&page=${this.state.page}&key=${this.state.API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
+      )
         .then(response => {
           if (response.ok) return response.json();
 
@@ -61,6 +51,23 @@ export default class App extends Component {
           });
         })
         .catch(error => this.setState({ error, status: 'rejected' }));
+    }, 1000);
+  };
+
+  componentDidUpdate(prevProps, pervState) {
+    const prevName = pervState.imageName;
+    const nextName = this.state.imageName;
+    // const queryParams = `?q=${nextName}&page=1&key=${this.state.API_KEY}&image_type=photo&orientation=horizontal&per_page=12`;
+    // const url = this.state.URL + queryParams;
+
+    if (prevName !== nextName) {
+      this.setState({ status: 'pending', gallery: [], page: 1 });
+      this.fetchImg();
+    }
+    if (pervState.page !== this.state.page) {
+      console.log('fetch data');
+      this.setState({ status: 'pending' });
+      this.fetchImg();
     }
   }
 
@@ -73,18 +80,19 @@ export default class App extends Component {
   };
 
   render() {
-    const { imageName, gallery, totalHits, status, error } = this.state;
+    const { gallery, totalHits, status, error } = this.state;
+
+    if (status === 'pending') {
+      return <Loader />;
+    }
 
     return (
       <div>
-        {status === 'pending' && <Loader />}
         <Searchbar onSubmit={this.hadleSearchFormSubmit}></Searchbar>
         {error && <h1>{error.message}</h1>}
         <ToastContainer autoClose={2000} />
-        {imageName && <p>{imageName} </p>}
         {gallery.length > 0 && <ImageGallery gallery={gallery} />}
         {totalHits > gallery.length && <Button onClick={this.loadMore} />}
-        {/* {showModal && <Modal onModalClose={this.toggleModal} />} */}
       </div>
     );
   }
