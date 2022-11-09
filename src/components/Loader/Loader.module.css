@@ -3,6 +3,15 @@
   animation: icon - spin 2s infinite linear;
 
   position: fixed;
+  width: 20vw;
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loaderBox {
+  position: fixed;
   width: 100vw;
   height: 100vh;
   display: flex;

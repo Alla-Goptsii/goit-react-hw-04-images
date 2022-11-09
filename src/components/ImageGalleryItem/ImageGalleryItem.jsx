@@ -55,6 +55,8 @@ export default class ImageGalleryItem extends Component {
 }
 
 ImageGalleryItem.propTypes = {
+  image: PropTypes.object.isRequired,
+
   id: PropTypes.number.isRequired,
   webformatURL: PropTypes.string.isRequired,
   largeImageURL: PropTypes.string.isRequired,

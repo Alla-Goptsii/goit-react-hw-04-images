@@ -1,5 +1,4 @@
 import { Component } from 'react';
-// import { imagesFetch } from '../../services/api';
 import Searchbar from '../Searchbar/Searchbar';
 import { ToastContainer, toast } from 'react-toastify';
 import ImageGallery from '../ImageGallery/ImageGallery';
@@ -28,9 +27,7 @@ export default class App extends Component {
           if (response.ok) return response.json();
 
           return Promise.reject(
-            new Error(
-              `Nothing was found for your request ${this.state.imageName}`
-            )
+            new Error(`Nothing was found for your request`)
           );
         })
         .then(gallery => {
@@ -47,7 +44,6 @@ export default class App extends Component {
               gallery: [...prevState.gallery, ...selectedProperties],
               status: 'resolved',
               totalHits: gallery.total,
-              // page: 1,
             };
           });
         })
@@ -58,15 +54,12 @@ export default class App extends Component {
   componentDidUpdate(prevProps, pervState) {
     const prevName = pervState.imageName;
     const nextName = this.state.imageName;
-    // const queryParams = `?q=${nextName}&page=1&key=${this.state.API_KEY}&image_type=photo&orientation=horizontal&per_page=12`;
-    // const url = this.state.URL + queryParams;
 
     if (prevName !== nextName) {
       this.setState({ status: 'pending', gallery: [], page: 1 });
       this.fetchImg();
     }
     if (pervState.page !== this.state.page) {
-      console.log('fetch data');
       this.setState({ status: 'pending' });
       this.fetchImg();
     }
@@ -98,30 +91,3 @@ export default class App extends Component {
     );
   }
 }
-
-// console.log(this.state.galery.hits), this.state.galery.hits.id;
-// if (status === 'idle') {
-//   <div>
-//     <Searchbar onSubmit={this.hadleSearchFormSubmit}></Searchbar>;
-//   </div>;
-//   return <div>Введіть запит</div>;
-// }
-// if (status === 'panding') {
-//   return <div>Завантужуемо...</div>;
-// }
-// if (status === 'rejected') {
-//   return <div>{this.state.error.message}</div>;
-// }
-// if (status === 'resolved') {
-//   return (
-//     <div>
-//       <Searchbar onSubmit={this.hadleSearchFormSubmit}></Searchbar>
-//       <ToastContainer autoClose={2000} />
-//       {imageName && <p>{imageName} </p>}
-//       {gallery.length > 0 && <ImageGallery gallery={gallery} />}
-//       {totalHits > gallery.length && (
-//         <Button onClick={this.handleLoadMore} />
-//       )}
-//     </div>
-//   );
-// }

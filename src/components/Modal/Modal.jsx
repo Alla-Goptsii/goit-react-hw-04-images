@@ -1,4 +1,5 @@
 import { Overlay, ModalBox } from './Modal.styled';
+import PropTypes from 'prop-types';
 
 export const Modal = ({ largeImageURL, about, onModalClose }) => {
   return (
@@ -12,4 +13,10 @@ export const Modal = ({ largeImageURL, about, onModalClose }) => {
       </ModalBox>
     </Overlay>
   );
+};
+
+Modal.propTypes = {
+  largeImageURL: PropTypes.string.isRequired,
+  about: PropTypes.string.isRequired,
+  onModalClose: PropTypes.func.isRequired,
 };
