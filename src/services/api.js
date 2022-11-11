@@ -9,7 +9,6 @@ export const fetchImg = async (imageName, page, status) => {
       `?q=${imageName}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
     );
     if (response.data.hits.length < 1) {
-      console.log(response.data);
       status('rejected');
     }
     return response.data;
