@@ -1,10 +1,20 @@
 import { ImSpinner10 } from 'react-icons/im';
-import s from './Loader.module.css';
+import { LoaderBox } from './Loader.styled';
 
 export function Loader() {
   return (
-    <div className={s.loaderBox}>
-      <ImSpinner10 size="32" color="#111" className={s.iconSpin} />
-    </div>
+    <LoaderBox>
+      <ImSpinner10
+        size="50"
+        margin-right="10"
+        animation="iconSpin 2s infinite linear"
+        position="fixed"
+        width="40"
+        height="40"
+        display="flex"
+        align-items="center"
+        justify-content="center"
+      />
+    </LoaderBox>
   );
 }
