@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 import { fetchImg } from '../../services/api';
 import Searchbar from '../Searchbar/Searchbar';
@@ -26,22 +26,22 @@ export default class App extends Component {
     if ((prevName !== nextName || pervState.page) !== this.state.page) {
       this.setState({ status: 'pending' });
       fetchImg(imageName, page, status).then(data => {
-        if (data.hits.lenght === 0) {
-          toast.error('Nothing was found for your request');
-        } else {
-          this.setState({ status: 'resolved' });
-        }
         const selectedProperties = data.hits.map(
           ({ id, largeImageURL, webformatURL, tags }) => {
             return { id, largeImageURL, webformatURL, tags };
           }
         );
+        const totalPages = Math.ceil(data.totalHits / 12);
+
+        if (prevName !== nextName) {
+          this.setState({ gallery: [] });
+        }
 
         this.setState(prevState => {
           return {
             gallery: [...prevState.gallery, ...selectedProperties],
             status: 'resolved',
-            totalHits: this.state.gallery.total,
+            totalPages: totalPages,
           };
         });
       });
@@ -57,19 +57,22 @@ export default class App extends Component {
   };
 
   render() {
-    const { gallery, status, error } = this.state;
+    const { gallery, status, totalPages, page, error } = this.state;
 
     if (status === 'pending') {
       return <Loader />;
     }
 
+    if (status === 'rejected') {
+      return { error };
+    }
+
     return (
       <Container>
         <Searchbar onSubmit={this.hadleSearchFormSubmit}></Searchbar>
-        {error && <h1>{error.message}</h1>}
-        <ToastContainer autoClose={2000} />
-        {gallery.length > 0 && <ImageGallery gallery={gallery} />}
-        {this.state.status === 'resolved' && <Button onClick={this.loadMore} />}
+        {totalPages === 0 && <ToastContainer autoClose={2000} />}
+        {status === 'resolved' && <ImageGallery gallery={gallery} />}
+        {totalPages > page && <Button onClick={this.loadMore} />}
       </Container>
     );
   }
