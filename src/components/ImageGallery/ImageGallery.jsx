@@ -14,7 +14,7 @@ export function ImageGallery({ gallery }) {
             id={image.id}
             largeImageURL={image.largeImageURL}
             tags={image.tags}
-            image={image}
+            // image={image}
           />
         );
       })}
