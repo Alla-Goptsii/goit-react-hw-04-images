@@ -38,8 +38,10 @@ export default function ImageGalleryItem({
   // }
 
   useEffect(() => {
-    window.addEventListener('keydown', onModalKeydown);
-  }, [onModalKeydown]);
+    if (isModalOpen) {
+      window.addEventListener('keydown', onModalKeydown);
+    } else window.removeEventListener('keydown', onModalKeydown);
+  });
 
   // const { webformatURL, largeImageURL, tags, id } = image;
   return (
