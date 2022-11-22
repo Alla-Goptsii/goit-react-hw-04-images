@@ -10,6 +10,7 @@ import {
 } from './ImageGalleryItem.styled';
 
 export default function ImageGalleryItem({
+  image,
   tags,
   largeImageURL,
   id,
@@ -38,7 +39,7 @@ export default function ImageGalleryItem({
 
   useEffect(() => {
     window.addEventListener('keydown', onModalKeydown);
-  }, [isModalOpen]);
+  }, [onModalKeydown]);
 
   // const { webformatURL, largeImageURL, tags, id } = image;
   return (
