@@ -1,7 +1,7 @@
 // import { Component } from 'react';
 import { useState, useEffect } from 'react';
 
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 import { fetchImg } from '../../services/api';
 import Searchbar from '../Searchbar/Searchbar';
@@ -18,45 +18,59 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [totalHits, setTotalHits] = useState(null);
 
-  // componentDidUpdate(_, pervState) {
-  //   const prevName = pervState.imageName;
-  //   const nextName = this.state.imageName;
-  //   const { imageName, page, status } = this.state;
+  useEffect(() => {
+    if (imageName === '') {
+      return;
+    }
 
-  //   if ((prevName !== nextName || pervState.page) !== this.state.page) {
-  //     this.setState({ status: 'pending' });
-  //     fetchImg(imageName, page, status).then(data => {
-  //       const selectedProperties = data.hits.map(
-  //         ({ id, largeImageURL, webformatURL, tags }) => {
-  //           return { id, largeImageURL, webformatURL, tags };
-  //         }
-  //       );
-  //       const totalPages = Math.ceil(data.totalHits / 12);
+    setStatus('pending');
 
-  //       if (prevName !== nextName) {
-  //         this.setState({ gallery: [] });
-  //       }
+    fetchImg(imageName, page, status).then(data => {
+      console.log(data);
 
-  //       this.setState(prevState => {
-  //         return {
-  //           gallery: [...prevState.gallery, ...selectedProperties],
-  //           status: 'resolved',
-  //           totalPages: totalPages,
-  //         };
-  //       });
-  //     });
-  //   }
-  // }
+      console.log(data.hits.length);
+      // if (data.hits.length < 1) {
+      //   setStatus('rejected');
+      // }
+      // if (!gallery.total) {
+      //   toast.error('Did find anything, mate');
+      //   return;
+      // }
+
+      const selectedProperties = data.hits.map(
+        ({ id, largeImageURL, webformatURL, tags }) => {
+          return { id, largeImageURL, webformatURL, tags };
+        }
+      );
+      setGallery(prev => [...prev, ...selectedProperties]);
+      setStatus('resolved');
+      setTotalHits(data.total);
+    });
+
+    // setGallery([]);
+    // setGallery([...prevGallery, ...selectedProperties]);
+    // setStatus('resolved');
+
+    // this.setState(prevState => {
+    //   return {
+    //     gallery: [...prevState.gallery, ...selectedProperties],
+    //     status: 'resolved',
+    //     totalPages: totalPages,
+    // };
+    // });
+  }, [imageName, page]);
+
+  const totalPages = Math.ceil(totalHits / 12);
 
   const hadleSearchFormSubmit = imageName => {
     setImageName(imageName);
+    setPage(1);
+    setGallery([]);
   };
 
   const loadMore = () => {
     setPage(prevPage => prevPage + 1);
   };
-
-  // const { gallery, status, totalPages, page, error } = this.state;
 
   if (status === 'pending') {
     return <Loader />;
