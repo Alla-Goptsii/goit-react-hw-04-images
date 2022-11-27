@@ -25,7 +25,7 @@ export default function App() {
 
     setStatus('pending');
 
-    fetchImg(imageName, page, status).then(data => {
+    fetchImg(imageName, page).then(data => {
       if (data.hits.length < 1) {
         setStatus('rejected');
       }
