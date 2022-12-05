@@ -1,4 +1,3 @@
-// import { Component } from 'react';
 import { useState, useEffect } from 'react';
 
 import { ToastContainer } from 'react-toastify';
@@ -17,6 +16,18 @@ export default function App() {
   const [status, setStatus] = useState('idle');
   const [page, setPage] = useState(1);
   const [totalHits, setTotalHits] = useState(null);
+
+  const totalPages = Math.ceil(totalHits / 12);
+
+  const hadleSearchFormSubmit = imageName => {
+    setImageName(imageName);
+    setPage(1);
+    setGallery([]);
+  };
+
+  const loadMore = () => {
+    setPage(prevPage => prevPage + 1);
+  };
 
   useEffect(() => {
     if (imageName === '') {
@@ -38,33 +49,23 @@ export default function App() {
       setGallery(prev => [...prev, ...selectedProperties]);
       setStatus('resolved');
       setTotalHits(data.total);
+      setError(error);
     });
-  }, [imageName, page]);
 
-  const totalPages = Math.ceil(totalHits / 12);
+    // if (status === 'pending') {
+    //   return <Loader />;
+    // }
 
-  const hadleSearchFormSubmit = imageName => {
-    setImageName(imageName);
-    setPage(1);
-    setGallery([]);
-  };
-
-  const loadMore = () => {
-    setPage(prevPage => prevPage + 1);
-  };
-
-  if (status === 'pending') {
-    return <Loader />;
-  }
-
-  if (status === 'rejected') {
-    return setError(error);
-  }
+    // if (status === 'rejected') {
+    //   return setError(error);
+    // }
+  }, [imageName, page, error]);
 
   return (
     <Container>
       <Searchbar onSubmit={hadleSearchFormSubmit}></Searchbar>
       {totalPages === 0 && <ToastContainer autoClose={2000} />}
+      {status === 'pending' && <Loader />}
       {status === 'resolved' && <ImageGallery gallery={gallery} />}
       {totalPages > page && <Button onClick={loadMore} />}
     </Container>
